@@ -3,8 +3,6 @@ package com.hfx.keycloak.spi.impl;
 import com.hfx.keycloak.SmsException;
 import com.hfx.keycloak.VerificationCodeRepresentation;
 import com.hfx.keycloak.spi.SmsService;
-import com.ksyun.model.rdto.CreateTemplateResult;
-import com.ksyun.model.rdto.SendSmsResult;
 import okhttp3.Response;
 import org.keycloak.models.KeycloakSession;
 
@@ -43,12 +41,7 @@ public class KsyunSmsService implements SmsService<Object> {
         params.put("datas", extraData);
 
         Map<String, String> tplParams = Collections.singletonMap("code", rep.getCode());
-        com.ksyun.SmsService smsService = new com.ksyun.SmsService(ak, sk);
-        try {
-            SendSmsResult sendSmsResult = smsService.sendSms(rep.getPhoneNumber(), templateId, tplParams, content, smsType, signName, ExtId);
-        } catch (Exception e) {
-            throw new SmsException(e.getMessage());
-        }
+        System.out.printf("============= DEBUG ============: %s", rep.getCode());
         return true;
     }
 }

@@ -5,7 +5,7 @@
     <#elseif section = "form">
 
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <#if captchaKey?has_content >
             <script src="https://www.recaptcha.net/recaptcha/api.js" nonce="{NONCE}" async defer></script>
         </#if>

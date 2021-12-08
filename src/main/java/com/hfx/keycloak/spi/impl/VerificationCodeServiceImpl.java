@@ -44,13 +44,13 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     }
 
     protected static String getCode() {
-        // It will generate 4 digit random Number.
-        // from 0 to 9999
+        // It will generate 6 digit random Number.
+        // from 0 to 999999
         Random rnd = new Random();
-        int number = rnd.nextInt(9999);
+        int number = rnd.nextInt(999999);
 
         // this will convert any number sequence into 4 character.
-        return String.format("%04d", number);
+        return String.format("%06d", number);
     }
 
     @Override

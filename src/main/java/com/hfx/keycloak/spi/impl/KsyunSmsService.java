@@ -12,15 +12,21 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.keycloak.models.KeycloakSession;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class KsyunSmsService implements SmsService<Object> {
@@ -68,8 +74,18 @@ public class KsyunSmsService implements SmsService<Object> {
     public static String sendCode(String url, String accessKey, String secretKey, String phone, String code) {
         CloseableHttpResponse httpResponse = null;
         String result = "";
+        SSLContextBuilder builder = new SSLContextBuilder();
         // 创建httpClient实例
         CloseableHttpClient httpClient = HttpClients.createDefault();
+        try {
+            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                    builder.build());
+            httpClient = HttpClients.custom().setSSLSocketFactory(
+                    sslsf).build();
+        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+            e.printStackTrace();
+        }
         // 创建httpPost远程连接实例
         HttpPost httpPost = new HttpPost(url);
         // 配置请求参数实例
